@@ -1,5 +1,13 @@
 import { useTransaction } from "../contexts/TransactionContext";
-import Link from 'next/link';
+import Link from "next/link";
+
+function TransactionID({ txId }) {
+  return (
+    <Link href={`https://testnet.flowdiver.io/tx/${txId}`} target="_blank">
+      {txId?.slice(0, 8)}
+    </Link>
+  );
+}
 
 function Transaction() {
   const { transactionStatus, txId, transactionInProgress } = useTransaction();
@@ -21,9 +29,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span>
           <kbd>Pending</kbd>
@@ -42,9 +48,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span>
           <kbd>Finalized</kbd>
@@ -65,9 +69,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span>
           <kbd>Executed</kbd>
@@ -88,9 +90,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span>
           <kbd>✓ Sealed</kbd>
@@ -111,9 +111,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span>
           <kbd>Expired</kbd>
@@ -130,9 +128,7 @@ function Transaction() {
     return (
       <div>
         <span className="txId">
-          <Link href={`https://testnet.flowscan.org/transaction/${txId}`}>
-            {txId?.slice(0, 8)}
-          </Link>
+          <TransactionID txId={txId} />
         </span>
         <span data-theme="invalid">Error!</span>
       </div>

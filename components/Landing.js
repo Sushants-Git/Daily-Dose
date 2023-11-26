@@ -1,27 +1,42 @@
 import "../flow/config";
 import { useAuth } from "../contexts/AuthContext";
 import Profile from "./Profile";
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import HomePage from "./HomePage.js";
+import Link from "next/link";
 
 function Landing() {
+  const [currentPage, setCurrentPage] = useState("LogOut");
   const { currentUser, profileExists, logOut, logIn, signUp, createProfile } =
     useAuth();
 
   const AuthedState = () => {
-    return (
-      <div>
-        <div>Logged in as: {currentUser?.addr ?? "No Address"}</div>
-        <button onClick={logOut}>Log Out</button>
-
-        <h2>Controls</h2>
-        <button onClick={createProfile}>Create Profile</button>
-      </div>
-    );
+    useEffect(function () {
+      setCurrentPage((currentValue) => "Home");
+    }, []);
+    if (currentPage === "Home") {
+      return (
+        <div>
+          <HomePage />
+        </div>
+      );
+    } else {
+      return (
+        <>
+          <div>{profileExists && <Profile />}</div>
+          <div>
+            <div>Logged in as: {currentUser?.addr ?? "No Address"}</div>
+            <h2>Controls</h2>
+            <button onClick={createProfile}>Create Profile</button>
+          </div>
+        </>
+      );
+    }
   };
 
   const UnauthenticatedState = () => {
     return (
-      <div>
+      <div className="landing-bottons">
         <button onClick={logIn}>Log In</button>
         <button onClick={signUp}>Sign Up</button>
       </div>
@@ -30,27 +45,49 @@ function Landing() {
 
   const Messages = () => {
     if (!currentUser?.loggedIn) {
-      return "Get started by logging in or signing up.";
-    } else {
-      if (profileExists) {
-        return "Your Profile lives on the blockchain.";
-      } else {
-        return "Create a profile on the blockchain.";
-      }
+      return "Rewarding the Hardworkers";
     }
+    // else {
+    //   if (profileExists) {
+    //     return "Your Profile lives on the blockchain.";
+    //   } else {
+    //     return "Create a profile on the blockchain.";
+    //   }
+    // }
   };
 
   return (
-    <div>
-      <div className="grid">
-        <div>
-          <h1>
-            Welcome to <Link href="https://docs.onflow.org">Web3</Link>
-          </h1>
+    <div className="landing-container">
+      {currentPage !== "LogOut" ? (
+        <nav className="nav">
+          <ul>
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+          </ul>
+        </nav>
+      ) : (
+        ""
+      )}
+      {currentPage !== "LogOut" ? (
+        <button
+          className="logout-button"
+          onClick={() => {
+            logOut();
+            setCurrentPage("LogOut");
+          }}
+        >
+          Log Out
+        </button>
+      ) : (
+        ""
+      )}
+      <div className="landing">
+        <div className="landing-text">
+          {currentPage !== "LogOut" ? "" : <h1>Daily Dose</h1>}
           <p>
             <Messages />
           </p>
-          {profileExists && <Profile />}
         </div>
         <div>
           {currentUser?.loggedIn ? <AuthedState /> : <UnauthenticatedState />}
